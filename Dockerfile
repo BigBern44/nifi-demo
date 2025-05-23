@@ -7,3 +7,14 @@ COPY scripts/ /opt/nifi/scripts/
 
 # Donner les bons droits à l'utilisateur NiFi
 RUN chown -R nifi:nifi /opt/nifi/scripts/
+
+COPY github-root-ca.pem /tmp/github-root-ca.pem
+
+RUN keytool -importcert -trustcacerts -noprompt \
+    -alias github-ca \
+    -file /tmp/github-root-ca.pem \
+    -cacerts \
+    -storepass changeit
+
+    
+RUN rm /tmp/github-root-ca.pem
